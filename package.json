@@ -9,16 +9,20 @@
     "prebuild": "rimraf dist",
     "build": "tsc"
   },
-  "repository": "git+https://github.com/lucasbernardol/paging-util.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lucasbernardol/paging-util.git"
+  },
   "keywords": [
     "paging",
     "paging algorithm",
     "paging calculate",
     "pagination",
-    "pagination algorithm",
-    "pagination calculate",
+    "paginate",
     "algorithm",
-    "node"
+    "node",
+    "typescript",
+    "javascript"
   ],
   "author": "José Lucas <jose.lukass03@gmail.com>",
   "license": "MIT",
