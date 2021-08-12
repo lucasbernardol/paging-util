@@ -76,3 +76,88 @@ export interface PaginationOutput {
   pagination: Pagination;
   range?: number[] | null;
 }
+
+export function paginate(options: Options): PaginationOutput {
+  const {
+    total,
+    limit = minItemsPerPage,
+    page = firstPage,
+    maxLimit = maxItemsPerPage,
+    calculateRange = false,
+  } = options || {};
+
+  const items = Number(total);
+
+  const totalInputIsNaNLessThanOne = items < 1 || isNaN(items);
+
+  if (totalInputIsNaNLessThanOne) return null;
+
+  /**
+   * Calculate total items per page
+   */
+  let totalPerPage = Number(limit);
+
+  const limitInputIsLessThanZeroNaN = totalPerPage < 1 || isNaN(totalPerPage);
+
+  if (limitInputIsLessThanZeroNaN) {
+    /**
+     * default: 10
+     */
+    totalPerPage = minItemsPerPage;
+  } else if (totalPerPage > maxLimit) {
+    totalPerPage = maxLimit;
+  }
+
+  /**
+   * Calculate total pages
+   */
+  const totalPages = Math.ceil(items / totalPerPage) || firstPage;
+
+  /**
+   * Calculate current page
+   */
+  let currentPage = Number(page);
+
+  const pageInputIsLessThanZeroNaN = currentPage < 1 || isNaN(currentPage);
+
+  if (pageInputIsLessThanZeroNaN) {
+    currentPage = firstPage;
+  } else if (currentPage > totalPages) {
+    currentPage = totalPages;
+  }
+
+  /**
+   * Previous and Next page
+   */
+  const hasNextPage = currentPage < totalPages;
+
+  const hasPreviousPage = currentPage > firstPage;
+
+  const nextPage = hasNextPage ? currentPage + 1 : null;
+
+  const previousPage = hasPreviousPage ? currentPage - 1 : null;
+
+  /**
+   * Offset or take
+   */
+  const offSet = (currentPage - 1) * totalPerPage;
+
+  const paginationRangeOrPages = calculateRange
+    ? range(firstPage, totalPages)
+    : null;
+
+  return {
+    pagination: {
+      items,
+      totalPages,
+      currentPage,
+      limit: totalPerPage,
+      hasNextPage,
+      hasPreviousPage,
+      nextPage,
+      previousPage,
+      offSet,
+    },
+    range: paginationRangeOrPages,
+  };
+}
