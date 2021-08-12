@@ -8,10 +8,10 @@ export const maxItemsPerPage = 30;
  * Min items per page
  * @constant
  */
-export const minItemsPerPage = 30;
+export const minItemsPerPage = 10;
 
 /**
  * Inital page
  * @constant
  */
-export const firstPage = 30;
+export const firstPage = 1;
