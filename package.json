@@ -6,13 +6,10 @@
   "scripts": {
     "test": "echo \"OK\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lucasbernardol/paging-util.git"
-  },
+  "repository": "git+https://github.com/lucasbernardol/paging-util.git",
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "José Lucas <jose.lukass03@gmail.com>",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/lucasbernardol/paging-util/issues"
   },
