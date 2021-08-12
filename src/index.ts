@@ -72,9 +72,16 @@ export interface Pagination {
   offSet?: number;
 }
 
+export interface Static {
+  maxItemsPerPage: number;
+  minItemsPerPage: number;
+  firstPage: number;
+}
+
 export interface PaginationOutput {
   pagination: Pagination;
   range?: number[] | null;
+  static?: Static | null;
 }
 
 export function paginate(options: Options): PaginationOutput {
@@ -142,9 +149,10 @@ export function paginate(options: Options): PaginationOutput {
    */
   const offSet = (currentPage - 1) * totalPerPage;
 
-  const paginationRangeOrPages = calculateRange
-    ? range(firstPage, totalPages)
-    : null;
+  /**
+   * Pagination range
+   */
+  const pages = calculateRange ? range(firstPage, totalPages) : null;
 
   return {
     pagination: {
@@ -158,6 +166,11 @@ export function paginate(options: Options): PaginationOutput {
       previousPage,
       offSet,
     },
-    range: paginationRangeOrPages,
+    static: {
+      firstPage,
+      maxItemsPerPage,
+      minItemsPerPage,
+    },
+    range: pages,
   };
 }
