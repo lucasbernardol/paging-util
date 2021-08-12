@@ -1,0 +1,20 @@
+{
+  "name": "paging-util",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"OK\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucasbernardol/paging-util.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lucasbernardol/paging-util/issues"
+  },
+  "homepage": "https://github.com/lucasbernardol/paging-util#readme"
+}
