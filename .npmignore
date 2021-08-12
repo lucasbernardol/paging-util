@@ -1,0 +1,13 @@
+# Folders
+node_modules/
+.husky/
+src/
+
+# Files
+.gitignore
+.editorconfig
+.prettierrc
+commitlint.config.js
+tsconfig.json
+yarn.lock
+*.lock
