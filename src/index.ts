@@ -40,3 +40,39 @@ export function range(start: number, end: number): number[] | null {
 
   return accumulator.length ? accumulator : null;
 }
+
+export interface Options {
+  total: number;
+  maxLimit?: number;
+  /**
+   * @default 10
+   */
+  limit?: number;
+
+  /**
+   * @default 1
+   */
+  page?: number;
+  /**
+   * @example const pages = [1, 2, 3, ...];
+   * @default false
+   */
+  calculateRange?: boolean;
+}
+
+export interface Pagination {
+  items: number;
+  totalPages: number;
+  currentPage: number;
+  limit: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  nextPage: number | null;
+  previousPage: number | null;
+  offSet?: number;
+}
+
+export interface PaginationOutput {
+  pagination: Pagination;
+  range?: number[] | null;
+}
