@@ -1,13 +1,23 @@
 {
   "name": "paging-util",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A generic paging algorithm for Node.js and JavaScript",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"OK\" && exit 1"
   },
   "repository": "git+https://github.com/lucasbernardol/paging-util.git",
-  "keywords": [],
+  "keywords": [
+    "paging",
+    "paging algorithm",
+    "paging calculate",
+    "pagination",
+    "pagination algorithm",
+    "pagination calculate",
+    "algorithm",
+    "node"
+  ],
   "author": "José Lucas <jose.lukass03@gmail.com>",
   "license": "MIT",
   "bugs": {
