@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/lucasbernardol/paging-util/issues"
   },
-  "homepage": "https://github.com/lucasbernardol/paging-util#readme"
+  "homepage": "https://github.com/lucasbernardol/paging-util#readme",
+  "devDependencies": {
+    "typescript": "^4.3.5"
+  }
 }
