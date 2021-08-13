@@ -1,41 +1,33 @@
 /**
- * Max items per page
  * @constant
  */
-export const maxItemsPerPage = 30;
+const firstPage = 1;
 
 /**
- * Min items per page
  * @constant
  */
-export const minItemsPerPage = 10;
+const maxItemsPerPage = 30;
 
 /**
- * Inital page
  * @constant
  */
-export const firstPage = 1;
+const minItemsPerPage = 10;
 
-/**
- * Calculate range
- */
-export function range(start: number, end: number): number[] | null {
+export function calculateRange(start: number, end: number): number[] | null {
   const argumentsLengthIsLessThanTwo = arguments.length < 2;
 
-  if (argumentsLengthIsLessThanTwo) {
-    return null;
-  }
+  if (argumentsLengthIsLessThanTwo) return null;
 
   const accumulator: number[] = [];
 
-  const accumulatorArrayLength = end - start + 1;
+  const lastInteraction = end - start + 1;
 
-  let interactionsIndex = 0;
+  let interactions = 0;
 
-  while (interactionsIndex < accumulatorArrayLength) {
-    accumulator[interactionsIndex] = start + interactionsIndex;
+  while (interactions < lastInteraction) {
+    accumulator[interactions] = start + interactions;
 
-    interactionsIndex++;
+    interactions++;
   }
 
   return accumulator.length ? accumulator : null;
@@ -44,6 +36,7 @@ export function range(start: number, end: number): number[] | null {
 export interface Options {
   total: number;
   maxLimit?: number;
+  minLimit?: number;
   /**
    * @default 10
    */
@@ -54,123 +47,143 @@ export interface Options {
    */
   page?: number;
   /**
-   * @example const pages = [1, 2, 3, ...];
    * @default false
    */
-  calculateRange?: boolean;
+  setRange?: boolean;
+  /**
+   * @default false
+   */
+  setStatic?: boolean;
+}
+
+export interface Static {
+  minItemsPerPage: number;
+  maxItemsPerPage: number;
 }
 
 export interface Pagination {
-  items: number;
-  totalPages: number;
+  total: number;
+  pages: number;
   currentPage: number;
   limit: number;
   hasNextPage: boolean;
   hasPreviousPage: boolean;
-  nextPage: number | null;
-  previousPage: number | null;
+  next: number | null;
+  previous: number | null;
+  firstIndex?: number;
+  lastIndex?: number;
+  maxLimit?: number;
+  minLimit?: number;
   offSet?: number;
-}
-
-export interface Static {
-  maxItemsPerPage: number;
-  minItemsPerPage: number;
-  firstPage: number;
-}
-
-export interface PaginationOutput {
-  pagination: Pagination;
   range?: number[] | null;
   static?: Static | null;
 }
 
-export function paginate(options: Options): PaginationOutput {
+const lessThanOneOrNaN = (v: number) => v < 1 || isNaN(v);
+
+export function paginate(options: Options): Pagination {
   const {
     total,
     limit = minItemsPerPage,
     page = firstPage,
+    minLimit = minItemsPerPage,
     maxLimit = maxItemsPerPage,
-    calculateRange = false,
+    setRange = false,
+    setStatic = false,
   } = options || {};
 
-  const items = Number(total);
+  const totalItems = Number(total);
 
-  const totalInputIsNaNLessThanOne = items < 1 || isNaN(items);
+  const totalInputIsNaNLessThanOne = lessThanOneOrNaN(totalItems);
 
-  if (totalInputIsNaNLessThanOne) return null;
-
-  /**
-   * Calculate total items per page
-   */
-  let totalPerPage = Number(limit);
-
-  const limitInputIsLessThanZeroNaN = totalPerPage < 1 || isNaN(totalPerPage);
-
-  if (limitInputIsLessThanZeroNaN) {
-    /**
-     * default: 10
-     */
-    totalPerPage = minItemsPerPage;
-  } else if (totalPerPage > maxLimit) {
-    totalPerPage = maxLimit;
+  if (totalInputIsNaNLessThanOne) {
+    return null;
   }
 
   /**
-   * Calculate total pages
+   *  - Total items per page
    */
-  const totalPages = Math.ceil(items / totalPerPage) || firstPage;
+  let totalItemsPerPage = Number(limit);
+
+  const limitInputIsLessThanOneNaN = lessThanOneOrNaN(totalItemsPerPage);
+
+  if (limitInputIsLessThanOneNaN) {
+    /**
+     * default: 10
+     */
+    totalItemsPerPage = minLimit;
+  } else if (totalItemsPerPage > maxLimit) {
+    totalItemsPerPage = maxLimit;
+  }
+
+  const totalPages = Math.ceil(totalItems / totalItemsPerPage) || firstPage;
 
   /**
-   * Calculate current page
+   * - Current page index
    */
   let currentPage = Number(page);
 
-  const pageInputIsLessThanZeroNaN = currentPage < 1 || isNaN(currentPage);
+  const pageInputIsLessThanOneNaN = lessThanOneOrNaN(currentPage);
 
-  if (pageInputIsLessThanZeroNaN) {
+  if (pageInputIsLessThanOneNaN) {
+    /**
+     * default: 1
+     */
     currentPage = firstPage;
   } else if (currentPage > totalPages) {
     currentPage = totalPages;
   }
 
   /**
-   * Previous and Next page
+   * - Previous
+   * - Next
    */
   const hasNextPage = currentPage < totalPages;
 
   const hasPreviousPage = currentPage > firstPage;
 
-  const nextPage = hasNextPage ? currentPage + 1 : null;
+  const next = hasNextPage ? currentPage + 1 : null;
 
-  const previousPage = hasPreviousPage ? currentPage - 1 : null;
-
-  /**
-   * Offset or take
-   */
-  const offSet = (currentPage - 1) * totalPerPage;
+  const previous = hasPreviousPage ? currentPage - 1 : null;
 
   /**
-   * Pagination range
+   * - offSet
+   * - take
    */
-  const pages = calculateRange ? range(firstPage, totalPages) : null;
+  const firstIndex = (currentPage - 1) * totalItemsPerPage;
+
+  const lastIndex = Math.min(
+    firstIndex + totalItemsPerPage - 1,
+    totalItems - 1
+  );
+
+  /**
+   * - calculate range
+   */
+  const range = setRange ? calculateRange(firstPage, totalPages) : null;
+
+  /**
+   * - static values
+   */
+  const staticValues: Static = setStatic
+    ? { minItemsPerPage, maxItemsPerPage }
+    : null;
 
   return {
-    pagination: {
-      items,
-      totalPages,
-      currentPage,
-      limit: totalPerPage,
-      hasNextPage,
-      hasPreviousPage,
-      nextPage,
-      previousPage,
-      offSet,
-    },
-    static: {
-      firstPage,
-      maxItemsPerPage,
-      minItemsPerPage,
-    },
-    range: pages,
+    total: totalItems,
+    pages: totalPages,
+    currentPage,
+    limit: totalItemsPerPage,
+    maxLimit,
+    minLimit,
+    next,
+    previous,
+    hasNextPage,
+    hasPreviousPage,
+    offSet: firstIndex,
+    firstIndex,
+    lastIndex,
+    range,
+    static: staticValues,
   };
 }
