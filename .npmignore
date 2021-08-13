@@ -8,6 +8,7 @@ src/
 .editorconfig
 .prettierrc
 .prettierignore
+.babelrc
 commitlint.config.js
 tsconfig.json
 yarn.lock
