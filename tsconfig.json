@@ -7,9 +7,12 @@
     "checkJs": false,
     "outDir": "./dist",
     "rootDir": "./src",
+
     "declaration": true,
     "declarationMap": false,
+    "emitDeclarationOnly": true,
     "sourceMap": true,
+
     "removeComments": false,
     "isolatedModules": false,
     "strict": false,
