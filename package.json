@@ -16,7 +16,6 @@
   "keywords": [
     "paging",
     "paging algorithm",
-    "paging calculate",
     "pagination",
     "paginate",
     "algorithm",
@@ -31,9 +30,15 @@
   },
   "homepage": "https://github.com/lucasbernardol/paging-util#readme",
   "devDependencies": {
+    "@babel/cli": "^7.14.8",
+    "@babel/core": "^7.15.0",
+    "@babel/node": "^7.14.9",
+    "@babel/preset-env": "^7.15.0",
+    "@babel/preset-typescript": "^7.15.0",
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
     "@types/node": "^16.6.0",
+    "babel-preset-minify": "^0.5.1",
     "husky": "^7.0.1",
     "prettier": "^2.3.2",
     "rimraf": "^3.0.2",
