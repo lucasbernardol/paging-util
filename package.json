@@ -7,7 +7,8 @@
   "scripts": {
     "test": "echo \"OK\" && exit 1",
     "prebuild": "rimraf dist",
-    "build": "tsc"
+    "build": "babel src --extensions \".js,.ts\" -d dist --source-maps",
+    "postbuild": "tsc"
   },
   "repository": {
     "type": "git",
