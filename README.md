@@ -35,26 +35,54 @@ $ npm install paging-util
 
 ## :file_folder: Basic Usage
 
-Using (import/export) ESM
+- Using (import/export) **ESM**
 
 ```javascript
-import { paginate } from 'paging-util';
-import * as Pageneric from 'paging-util';
-
-const { offSet } = paginate({ total: 100, page: 2 });
-
-console.log(offSet);
-```
-
-Using (require/node) CommonJS
-
-```javascript
-const { paginate } = require('paging-util');
+import { paginate, calculateRange } from 'paging-util';
 
 const { offSet } = paginate({ total: 100 });
+console.log(offSet); // output: 0
 
-console.log(offSet);
+const range = calculateRange(1, 10);
+console.log(range); // output: [1, 2, 3, 4, ...]
 ```
+
+- Using (require/node) **CommonJS**
+
+```javascript
+const { paginate, calculateRange } = require('paging-util');
+```
+
+## API
+
+- **paginate({ total: 100, ...options }):** Calculate pagination.
+
+| Property name | required | default | description                  |
+| ------------- | -------- | ------- | ---------------------------- |
+| total         | true     | null    | total items                  |
+| page          | false    | 1       | current page                 |
+| limit         | false    | 10      | total items to show per page |
+| min           | false    | 10      | min items per page           |
+| max           | false    | 30      | max items per page           |
+| setRange      | false    | false   | calculate range              |
+
+#### Output:
+
+- **total** - total items
+- **pages** - total pages
+- **current** - current page
+- **limit** - total items per page
+- **next** - next page or `null`
+- **previous** - previous page or `null`
+- **hasNextPage** - `true` or `false`
+- **hasPreviousPage** - `true` or `false`
+- **offSet** - pagination offset,
+- **firstIndex**, **lastIndex** - first and last pagination index,
+- **range** - array of pages or `null`
+
+---
+
+- **calculateRange(start, end):** Calculate range.
 
 ## Support project
 
