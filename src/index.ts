@@ -1,18 +1,7 @@
 /**
- * @constant
+ * Calculate range
+ * @function
  */
-const firstPage = 1;
-
-/**
- * @constant
- */
-const maxItemsPerPage = 30;
-
-/**
- * @constant
- */
-const minItemsPerPage = 10;
-
 export function calculateRange(start: number, end: number): number[] | null {
   const argumentsLengthIsLessThanTwo = arguments.length < 2;
 
@@ -33,15 +22,31 @@ export function calculateRange(start: number, end: number): number[] | null {
   return accumulator.length ? accumulator : null;
 }
 
+/**
+ * @constant
+ */
+const firstPage = 1;
+
+/**
+ * @constant
+ */
+const maxItemsPerPage = 30;
+
+/**
+ * @constant
+ */
+const minItemsPerPage = 10;
+
+const lessThanOneOrNaN = (v: number) => v < 1 || isNaN(v);
+
 export interface Options {
   total: number;
-  maxLimit?: number;
-  minLimit?: number;
+  max?: number;
+  min?: number;
   /**
    * @default 10
    */
   limit?: number;
-
   /**
    * @default 1
    */
@@ -50,10 +55,6 @@ export interface Options {
    * @default false
    */
   setRange?: boolean;
-  /**
-   * @default false
-   */
-  setStatic?: boolean;
 }
 
 export interface Static {
@@ -64,32 +65,33 @@ export interface Static {
 export interface Pagination {
   total: number;
   pages: number;
-  currentPage: number;
+  current: number;
   limit: number;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
+  min?: number;
+  max?: number;
   next: number | null;
   previous: number | null;
-  firstIndex?: number;
-  lastIndex?: number;
-  maxLimit?: number;
-  minLimit?: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  firstIndex: number;
+  lastIndex: number;
   offSet?: number;
   range?: number[] | null;
   static?: Static | null;
 }
 
-const lessThanOneOrNaN = (v: number) => v < 1 || isNaN(v);
-
-export function paginate(options: Options): Pagination {
+/**
+ * Calculate pagination
+ * @function
+ */
+export function paginate(options: Options): Pagination | null {
   const {
     total,
     limit = minItemsPerPage,
     page = firstPage,
-    minLimit = minItemsPerPage,
-    maxLimit = maxItemsPerPage,
+    min = minItemsPerPage,
+    max = maxItemsPerPage,
     setRange = false,
-    setStatic = false,
   } = options || {};
 
   const totalItems = Number(total);
@@ -111,46 +113,49 @@ export function paginate(options: Options): Pagination {
     /**
      * default: 10
      */
-    totalItemsPerPage = minLimit;
-  } else if (totalItemsPerPage > maxLimit) {
-    totalItemsPerPage = maxLimit;
+    totalItemsPerPage = min;
+  } else if (totalItemsPerPage > max) {
+    totalItemsPerPage = max;
   }
 
+  /**
+   * - total pages
+   */
   const totalPages = Math.ceil(totalItems / totalItemsPerPage) || firstPage;
 
   /**
    * - Current page index
    */
-  let currentPage = Number(page);
+  let current = Number(page);
 
-  const pageInputIsLessThanOneNaN = lessThanOneOrNaN(currentPage);
+  const pageInputIsLessThanOneNaN = lessThanOneOrNaN(current);
 
   if (pageInputIsLessThanOneNaN) {
     /**
      * default: 1
      */
-    currentPage = firstPage;
-  } else if (currentPage > totalPages) {
-    currentPage = totalPages;
+    current = firstPage;
+  } else if (current > totalPages) {
+    current = totalPages;
   }
 
   /**
    * - Previous
    * - Next
    */
-  const hasNextPage = currentPage < totalPages;
+  const hasNextPage = current < totalPages;
 
-  const hasPreviousPage = currentPage > firstPage;
+  const hasPreviousPage = current > firstPage;
 
-  const next = hasNextPage ? currentPage + 1 : null;
+  const next = hasNextPage ? current + 1 : null;
 
-  const previous = hasPreviousPage ? currentPage - 1 : null;
+  const previous = hasPreviousPage ? current - 1 : null;
 
   /**
    * - offSet
    * - take
    */
-  const firstIndex = (currentPage - 1) * totalItemsPerPage;
+  const firstIndex = (current - 1) * totalItemsPerPage;
 
   const lastIndex = Math.min(
     firstIndex + totalItemsPerPage - 1,
@@ -162,28 +167,20 @@ export function paginate(options: Options): Pagination {
    */
   const range = setRange ? calculateRange(firstPage, totalPages) : null;
 
-  /**
-   * - static values
-   */
-  const staticValues: Static = setStatic
-    ? { minItemsPerPage, maxItemsPerPage }
-    : null;
-
   return {
     total: totalItems,
     pages: totalPages,
-    currentPage,
+    current,
     limit: totalItemsPerPage,
-    maxLimit,
-    minLimit,
+    max,
+    min,
+    firstIndex,
+    lastIndex,
     next,
     previous,
     hasNextPage,
     hasPreviousPage,
     offSet: firstIndex,
-    firstIndex,
-    lastIndex,
     range,
-    static: staticValues,
   };
 }
