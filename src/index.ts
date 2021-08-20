@@ -2,21 +2,21 @@
  * Calculate range
  * @function
  */
-export function calculateRange(start: number, end: number): number[] | null {
-  const argumentsLengthIsLessThanTwo = arguments.length < 2;
+export function range(start?: number, end?: number): number[] | null {
+  const totalArgumentsIsLessThanTwo = arguments.length < 2;
 
-  if (argumentsLengthIsLessThanTwo) return null;
+  if (totalArgumentsIsLessThanTwo) {
+    return null;
+  }
 
   const accumulator: number[] = [];
 
-  const lastInteraction = end - start + 1;
+  let interactionsIndex = 0;
 
-  let interactions = 0;
+  while (interactionsIndex < end - start + 1) {
+    accumulator[interactionsIndex] = start + interactionsIndex;
 
-  while (interactions < lastInteraction) {
-    accumulator[interactions] = start + interactions;
-
-    interactions++;
+    interactionsIndex++;
   }
 
   return accumulator.length ? accumulator : null;
@@ -163,9 +163,9 @@ export function paginate(options: Options): Pagination | null {
   );
 
   /**
-   * - calculate range
+   * - range
    */
-  const range = setRange ? calculateRange(firstPage, totalPages) : null;
+  const calculatedRenge = setRange ? range(firstPage, totalPages) : null;
 
   return {
     total: totalItems,
@@ -181,6 +181,6 @@ export function paginate(options: Options): Pagination | null {
     hasNextPage,
     hasPreviousPage,
     offSet: firstIndex,
-    range,
+    range: calculatedRenge,
   };
 }
