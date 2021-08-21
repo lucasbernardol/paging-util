@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"OK\" && exit 1",
+    "test": "jest",
     "prebuild": "rimraf dist",
     "build": "babel src --extensions \".js,.ts\" -d dist --source-maps",
     "postbuild": "tsc"
