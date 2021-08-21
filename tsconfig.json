@@ -13,6 +13,8 @@
     "emitDeclarationOnly": true,
     "sourceMap": true,
 
+    "typeRoots": ["./node_modules/@types/*", "./src/@types"],
+
     "removeComments": false,
     "isolatedModules": false,
     "strict": false,
