@@ -1,13 +1,9 @@
-<div align="center">
-  <h2 align="center">Paging-util, generic algorithm</h2>
+## paging-util, generic algorithm
 
-  <p align="center">
-    A simple and generic paging algorithm for
-    Node.js JavaScript and TypeScript, free dependencies
-  </p>
-</div>
+> A simple and generic paging algorithm for
+> Node.js JavaScript and TypeScript, free dependencies
 
-<div align="center">
+<div>
   <img alt="GitHub" src="https://img.shields.io/github/license/lucasbernardol/paging-util" />
   <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/lucasbernardol/paging-util" />
   <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/lucasbernardol/paging-util" />
@@ -15,22 +11,16 @@
   <a href="www.github.com/lucasbernardol">
     <img src="https://img.shields.io/badge/author-Jos%C3%A9%20Lucas-brightgreen" />
   </a>
+
+  <img alt="npm" src="https://img.shields.io/npm/dm/paging-util">
 </div>
 
 ---
 
-## :arrow_down: Install guide
-
-- install via **yarn** package manager:
+## Install
 
 ```bash
 $ yarn add paging-util
-```
-
-- install via **npm** package manager:
-
-```bash
-$ npm install paging-util
 ```
 
 ## :file_folder: Basic Usage
@@ -38,51 +28,61 @@ $ npm install paging-util
 - Using (import/export) **ESM**
 
 ```javascript
-import { paginate, calculateRange } from 'paging-util';
+import { paginate, range } from 'paging-util';
 
 const { offSet } = paginate({ total: 100 });
-console.log(offSet); // output: 0
+console.log(offSet);
 
-const range = calculateRange(1, 10);
-console.log(range); // output: [1, 2, 3, 4, ...]
+const pages = range(1, 10);
+console.log(pages);
 ```
 
 - Using (require/node) **CommonJS**
 
 ```javascript
-const { paginate, calculateRange } = require('paging-util');
+const { paginate } = require('paging-util');
+
+const { range } = paginate({
+  total: 100,
+  setRange: true,
+});
+
+const odds = range.filter(value => !(value % 2));
 ```
 
 ## API
 
-- **paginate({ total: 100, ...options }):** Calculate pagination.
+- **paginate({ total: 100, ...options }):** pagination, main method.
 
-| Property name | required | default | description                  |
-| ------------- | -------- | ------- | ---------------------------- |
-| total         | true     | null    | total items                  |
-| page          | false    | 1       | current page                 |
-| limit         | false    | 10      | total items to show per page |
-| min           | false    | 10      | min items per page           |
-| max           | false    | 30      | max items per page           |
-| setRange      | false    | false   | calculate range              |
+#### Options
+
+| Prop name | required | default | description                        |
+| --------- | -------- | ------- | ---------------------------------- |
+| total     | true     | -       | total (resources)                  |
+| page      | false    | 1       | current page                       |
+| limit     | false    | 10      | total (resources) to show per page |
+| setRange  | false    | false   | calculate range                    |
 
 #### Output:
 
-- **total** - total items
-- **pages** - total pages
-- **current** - current page
-- **limit** - total items per page
-- **next** - next page or `null`
-- **previous** - previous page or `null`
-- **hasNextPage** - `true` or `false`
-- **hasPreviousPage** - `true` or `false`
-- **offSet** - pagination offset,
-- **firstIndex**, **lastIndex** - first and last pagination index,
-- **range** - array of pages or `null`
+- **pagination** - pagination `object`
+  - **total** - total items
+  - **pages** - total pages
+  - **currentPage** - current page
+  - **firstPage** - first page `1`
+  - **limit** - total items to show per page, `10`
+  - **firstResult, lastResult** - first and last result (indexes)
+  - **results** - results to show
+  - **next** - next page
+  - **previous** - previous page,
+  - **hasNextPage** - `true` or `false`
+  - **hasPreviousPage** - `true` or `false`
+- **offSet** - pagination Offset-based
+- **range** - array of pages
 
 ---
 
-- **calculateRange(start, end):** Calculate range.
+- **range(start?, end?):** array of pages.
 
 ## Support project
 
