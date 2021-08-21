@@ -44,3 +44,11 @@ export const second = {
     results: 10,
   },
 };
+
+export const third = {
+  options: second.options,
+  expected: {
+    ...second.expected,
+    range: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+  },
+};
