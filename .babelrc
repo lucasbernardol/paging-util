@@ -12,5 +12,6 @@
     ["minify"]
   ],
   "plugins": [],
-  "comments": false
+  "comments": false,
+  "ignore": ["src/**/*.spec.ts"]
 }
