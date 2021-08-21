@@ -1,4 +1,4 @@
-import { paginate, offSetCalculation } from '../dist';
+import { paginate, offsetBased } from '../dist';
 
 import { first, second, third } from './static/pagination';
 
@@ -14,12 +14,12 @@ describe('Paging: suite', () => {
     /**
      * - offSet, page 2
      */
-    const offSet2 = offSetCalculation(2, limit);
+    const offSet2 = offsetBased(2, limit);
 
     /**
      * - offSet, page 3
      */
-    const offSet3 = offSetCalculation(3, limit);
+    const offSet3 = offsetBased(3, limit);
 
     expect(offSet).toBe(0);
     expect(offSet2).toBe(10);
