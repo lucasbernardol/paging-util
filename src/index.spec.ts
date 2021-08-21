@@ -11,6 +11,22 @@ describe('Paging: suite', () => {
     expect(calculatedRange).toEqual(expected);
   });
 
+  it('should have a Array with values: 1 to 10', () => {
+    const length = 10;
+
+    const paginationRange = range(1, length);
+
+    console.log(paginationRange);
+
+    for (let key = 1; key <= length; key++) {
+      const expected = paginationRange[key - 1];
+
+      expect(key).toBe(expected);
+    }
+
+    expect(paginationRange.length).toBe(length);
+  });
+
   it('should be able to calculate the pagination offset', () => {
     const limit = 10;
 
