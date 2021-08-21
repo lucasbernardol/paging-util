@@ -1,5 +1,7 @@
 import { paginate, offSetCalculation } from '../dist';
 
+import { first } from './static/pagination';
+
 describe('Paging: suite', () => {
   it('should be able to calculate the pagination offset', () => {
     const limit = 10;
@@ -22,5 +24,13 @@ describe('Paging: suite', () => {
     expect(offSet).toBe(0);
     expect(offSet2).toBe(10);
     expect(offSet3).toBe(20);
+  });
+
+  it('should be pass in the first "test case"', () => {
+    const { options, expected } = first;
+
+    const { pagination } = paginate(options);
+
+    expect(pagination).toEqual(expected);
   });
 });
