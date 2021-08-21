@@ -23,6 +23,9 @@ export const first = {
   },
 };
 
+/**
+ * @constant
+ */
 export const second = {
   options: {
     total: 100,
@@ -45,6 +48,9 @@ export const second = {
   },
 };
 
+/**
+ * @constant
+ */
 export const third = {
   options: second.options,
   expected: {
