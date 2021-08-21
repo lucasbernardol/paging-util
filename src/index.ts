@@ -1,22 +1,14 @@
 /**
- * @function
+ * @constant
  */
-export function offSetCalculation(page: number, limit: number) {
-  const totalArgumentsIsLessThanTwo = arguments.length < 2;
-
-  if (totalArgumentsIsLessThanTwo) {
-    return null;
-  }
-
-  return (page - 1) * limit;
-}
+export const offsetBased = (current: number, limit: number) => {
+  return (current - 1) * limit;
+};
 
 /**
  * @constant
  */
-const lessThanOneNaNFunction = (value: number) => {
-  return value < 1 || isNaN(value);
-};
+const inputLessThanOneOrNaN = (value: number) => value < 1 || isNaN(value);
 
 const firstPage = 1;
 
@@ -114,27 +106,30 @@ export function paginate(options: Options): PaginationOutPut | null {
    */
   const context = options || ({} as Options);
 
-  const { minLimit = minItemsPerPage, maxLimit = maxItemsPerPage } = context;
-
-  const { total, limit = minLimit, page = firstPage, setRange } = context;
+  const {
+    total: items,
+    minLimit = minItemsPerPage,
+    maxLimit = maxItemsPerPage,
+    limit = minLimit,
+    page = firstPage,
+    setRange,
+  } = context;
 
   /**
-   * - items
+   * - total
    */
-  const items = Number(total);
+  const total = Number(items);
 
-  const totalInputLessThanOneOrNaN = lessThanOneNaNFunction(items);
+  const totalInputLessThanOneOrNaN = inputLessThanOneOrNaN(total);
 
-  if (totalInputLessThanOneOrNaN) {
-    return null;
-  }
+  if (totalInputLessThanOneOrNaN) return null;
 
   /**
    * - limit
    */
   let totalItemsPerPage = Number(limit);
 
-  const limitInputIsLessThanOneNaN = lessThanOneNaNFunction(totalItemsPerPage);
+  const limitInputIsLessThanOneNaN = inputLessThanOneOrNaN(totalItemsPerPage);
 
   totalItemsPerPage = limitInputIsLessThanOneNaN ? minLimit : totalItemsPerPage;
 
@@ -144,14 +139,14 @@ export function paginate(options: Options): PaginationOutPut | null {
   /**
    * - pages
    */
-  const pages = Math.max(firstPage, Math.ceil(items / totalItemsPerPage));
+  const pages = Math.max(firstPage, Math.ceil(total / totalItemsPerPage));
 
   /**
    * - current page index
    */
   let currentPage = Number(page);
 
-  const pageInputIsLessThanOneNaN = lessThanOneNaNFunction(currentPage);
+  const pageInputIsLessThanOneNaN = inputLessThanOneOrNaN(currentPage);
 
   currentPage = pageInputIsLessThanOneNaN ? firstPage : currentPage;
 
@@ -175,7 +170,7 @@ export function paginate(options: Options): PaginationOutPut | null {
   /**
    * - offSet
    */
-  const offSet = offSetCalculation(currentPage, totalItemsPerPage);
+  const offSet = offsetBased(currentPage, totalItemsPerPage);
 
   /**
    * - pagination range
@@ -183,20 +178,20 @@ export function paginate(options: Options): PaginationOutPut | null {
   const calculatedPaginationRange = setRange ? range(firstPage, pages) : null;
 
   /**
-   * - first, last result
+   * - first, last results
    */
-  const firstResult = offSetCalculation(currentPage, totalItemsPerPage);
+  const firstResult = offsetBased(currentPage, totalItemsPerPage);
 
-  const lastResult = Math.min(firstResult + totalItemsPerPage - 1, items - 1);
+  const lastResult = Math.min(firstResult + totalItemsPerPage - 1, total - 1);
 
   /**
-   * - total results
+   * - results
    */
-  const results = Math.min(lastResult - firstResult + 1, items);
+  const results = Math.min(lastResult - firstResult + 1, total);
 
   return {
     pagination: {
-      total: items,
+      total,
       results,
       pages,
       currentPage,
