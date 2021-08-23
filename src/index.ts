@@ -1,9 +1,7 @@
 /**
  * @constant
  */
-export const offsetBased = (current: number, limit: number) => {
-  return (current - 1) * limit;
-};
+export const offsetBased = (page: number, limit: number) => (page - 1) * limit;
 
 /**
  * @constant
@@ -17,7 +15,6 @@ const maxItemsPerPage = 30;
 const minItemsPerPage = 10;
 
 /**
- * Calculate range
  * @function
  */
 export function range(start?: number, end?: number): number[] | null {
@@ -42,7 +39,7 @@ export function range(start?: number, end?: number): number[] | null {
 
 export interface Options {
   /**
-   * - total items to paginate
+   * total number of items to be paged
    */
   total: number;
   /**
@@ -54,12 +51,12 @@ export interface Options {
    */
   minLimit?: number;
   /**
-   * - total items to show per page
+   * Total number of items per page, defaults to `10`
    * @default 10
    */
   limit?: number;
   /**
-   * - current page
+   * current active page, default `1`
    * @default 1
    */
   page?: number;
@@ -97,7 +94,6 @@ export interface PaginationOutPut {
 }
 
 /**
- * Calculate pagination
  * @function
  */
 export function paginate(options: Options): PaginationOutPut | null {
