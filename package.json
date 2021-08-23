@@ -1,6 +1,6 @@
 {
   "name": "paging-util",
-  "version": "1.0.4",
+  "version": "2.0.0",
   "description": "A generic paging algorithm for Node.js, JavaScript and TypeScript, free dependencies",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
