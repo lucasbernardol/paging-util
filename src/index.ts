@@ -13,24 +13,42 @@ export function offsetBased(current: number, limit: number) {
   return (current - 1) * limit;
 }
 
-export function range(start?: number, end?: number): number[] | null {
-  const totalArgumentsIsLessThanTwo = arguments.length < 2;
-
-  if (totalArgumentsIsLessThanTwo) {
-    return null;
-  }
-
+/**
+ * @function
+ */
+export function range(start: number, stop?: number, step: number = 1) {
   const accumulator: number[] = [];
 
-  let interactionsIndex = 0;
+  let steps = Number(step);
 
-  while (interactionsIndex < end - start + 1) {
-    accumulator[interactionsIndex] = start + interactionsIndex;
+  const stepIsEqualZeroNaN = steps === 0 || isNaN(steps);
+  if (stepIsEqualZeroNaN) return accumulator;
 
-    interactionsIndex++;
+  /**
+   * - stops
+   */
+  const stopIsUndefined = typeof stop === 'undefined';
+
+  if (stopIsUndefined) {
+    stop = start;
+    start = 0;
   }
 
-  return accumulator.length ? accumulator : null;
+  const startIsGreaterThanStop = steps > 0 && start > stop;
+  if (startIsGreaterThanStop) steps *= -1;
+
+  /**
+   * - range
+   */
+  let interactionsIndex = start;
+
+  while (steps > 0 ? interactionsIndex <= stop : interactionsIndex >= stop) {
+    accumulator.push(interactionsIndex);
+
+    interactionsIndex += steps;
+  }
+
+  return accumulator;
 }
 
 export interface Options {
@@ -167,7 +185,7 @@ export function paginate(options: Options): PaginationOutPut | null {
   /**
    * - pagination range
    */
-  const calculatedPaginationRange = setRange ? range(firstPage, pages) : null;
+  const calculatedRange = setRange ? range(firstPage, pages) : null;
 
   /**
    * - first, last results
@@ -197,6 +215,6 @@ export function paginate(options: Options): PaginationOutPut | null {
       previous,
     },
     offSet,
-    range: calculatedPaginationRange,
+    range: calculatedRange,
   };
 }
