@@ -1,21 +1,30 @@
-## paging-util, generic algorithm
+<h2>📘 paging-util, generic algorithm</h2>
+
+<p>
+  <a href="https://github.com/lucasbernardol/paging-util#readme" target="_blank">
+    <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/lucasbernardol/paging-util" />
+  </a>
+  <a href="https://www.npmjs.com/package/paging-util" target="_blank">
+    <img alt="Version" src="https://img.shields.io/npm/v/paging-util.svg">
+  </a>
+  <a href="https://github.com/lucasbernardol/paging-util#readme" target="_blank">
+    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
+  </a>
+  <a href="https://github.com/lucasbernardol/paging-util/graphs/commit-activity" target="_blank">
+    <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
+  </a>
+  <a href="https://github.com/lucasbernardol/paging-util/blob/master/LICENSE" target="_blank">
+    <img alt="License: MIT" src="https://img.shields.io/github/license/lucasbernardol/paging-util" />
+  </a>
+  <a href="https://github.com/lucasbernardol/paging-util#readme" target="_blank">
+    <img alt="npm" src="https://img.shields.io/npm/dm/paging-util">
+  </a>
+</p>
 
 > A simple and generic paging algorithm for
 > Node.js JavaScript and TypeScript, free dependencies
 
-<div>
-  <img alt="GitHub" src="https://img.shields.io/github/license/lucasbernardol/paging-util" />
-  <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/lucasbernardol/paging-util" />
-  <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/lucasbernardol/paging-util" />
-  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/lucasbernardol/paging-util" />
-  <a href="www.github.com/lucasbernardol">
-    <img src="https://img.shields.io/badge/author-Jos%C3%A9%20Lucas-brightgreen" />
-  </a>
-
-  <img alt="npm" src="https://img.shields.io/npm/dm/paging-util">
-</div>
-
----
+### 🏠 [Homepage](https://github.com/lucasbernardol/paging-util#readme)
 
 ## Install
 
@@ -28,13 +37,11 @@ $ yarn add paging-util
 - Using (import/export) **ESM**
 
 ```javascript
-import { paginate, range } from 'paging-util';
+import { paginate } from 'paging-util';
 
-const { offSet } = paginate({ total: 100 });
-console.log(offSet);
+const { offSet, pagination } = paginate({ total: 100 });
 
-const pages = range(1, 10);
-console.log(pages);
+console.log({ offSet, pagination });
 ```
 
 - Using (require/node) **CommonJS**
@@ -42,10 +49,7 @@ console.log(pages);
 ```javascript
 const { paginate } = require('paging-util');
 
-const { range } = paginate({
-  total: 100,
-  setRange: true,
-});
+const { range } = paginate({ total: 100, setRange: true });
 
 const odds = range.filter(value => !(value % 2));
 ```
@@ -84,9 +88,24 @@ const odds = range.filter(value => !(value % 2));
 
 - **range(start?, end?):** array of pages.
 
-## Support project
+## Author
 
-- Give me a :star: if project help you.
-- Contribuitions, issues and pull requests and more.
+👤 **José Lucas**
+
+- Github: [@lucasbernardol](https://github.com/lucasbernardol)
+
+## :open_hands: Contributing
+
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/lucasbernardol/paging-util/issues).
+
+## Support
+
+Give a ⭐️ if this project helped you!
+
+## 📝 License
+
+Copyright © 2021 [José Lucas](https://github.com/lucasbernardol).
+<br />
+This project is [MIT](https://github.com/lucasbernardol/paging-util/blob/master/LICENSE) licensed.
 
 Build with ❤️ by: [José Lucas](https://github.com/lucasbernardol)
