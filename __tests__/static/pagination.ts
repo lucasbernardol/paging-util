@@ -1,4 +1,5 @@
 /**
+ * - First
  * @constant
  */
 export const first = {
@@ -10,20 +11,21 @@ export const first = {
   expected: {
     total: 19,
     pages: 2,
-    currentPage: 2,
+    current: 2,
     firstPage: 1,
     limit: 10,
     next: null,
     previous: 1,
-    hasNextPage: false,
-    hasPreviousPage: true,
-    firstResult: 10,
-    lastResult: 18,
-    results: 9,
+    hasNext: false,
+    hasPrevious: true,
+    firstIndex: 10,
+    lastIndex: 18,
+    length: 9,
   },
 };
 
 /**
+ * - Second
  * @constant
  */
 export const second = {
@@ -35,20 +37,21 @@ export const second = {
   expected: {
     total: 100,
     pages: 10,
-    currentPage: 9,
+    current: 9,
     firstPage: 1,
     limit: 10,
     next: 10,
     previous: 8,
-    hasNextPage: true,
-    hasPreviousPage: true,
-    firstResult: 80,
-    lastResult: 89,
-    results: 10,
+    hasNext: true,
+    hasPrevious: true,
+    firstIndex: 80,
+    lastIndex: 89,
+    length: 10,
   },
 };
 
 /**
+ * - Third
  * @constant
  */
 export const third = {
