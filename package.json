@@ -29,9 +29,6 @@
   "bugs": {
     "url": "https://github.com/lucasbernardol/paging-util/issues"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/@lucasbernardol"
-  },
   "homepage": "https://github.com/lucasbernardol/paging-util#readme",
   "devDependencies": {
     "@babel/cli": "^7.14.8",
