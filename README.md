@@ -1,32 +1,13 @@
-<h2>📘 paging-util, generic algorithm</h2>
-
-<p>
-  <a href="https://github.com/lucasbernardol/paging-util#readme" target="_blank">
-    <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/lucasbernardol/paging-util" />
-  </a>
-  <a href="https://www.npmjs.com/package/paging-util" target="_blank">
-    <img alt="Version" src="https://img.shields.io/npm/v/paging-util.svg">
-  </a>
-  <a href="https://github.com/lucasbernardol/paging-util#readme" target="_blank">
-    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
-  </a>
-  <a href="https://github.com/lucasbernardol/paging-util/graphs/commit-activity" target="_blank">
-    <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
-  </a>
-  <a href="https://github.com/lucasbernardol/paging-util/blob/master/LICENSE" target="_blank">
-    <img alt="License: MIT" src="https://img.shields.io/github/license/lucasbernardol/paging-util" />
-  </a>
-  <a href="https://github.com/lucasbernardol/paging-util#readme" target="_blank">
-    <img alt="npm" src="https://img.shields.io/npm/dm/paging-util">
-  </a>
-</p>
+## 📘 paging-util ![GitHub top language](https://img.shields.io/github/languages/top/lucasbernardol/paging-util) ![Version](https://img.shields.io/npm/v/paging-util.svg) ![Documentation](https://img.shields.io/badge/documentation-yes-brightgreen.svg) ![License: MIT](https://img.shields.io/github/license/lucasbernardol/paging-util) ![Downloads](https://img.shields.io/npm/dm/paging-util)
 
 > A simple and generic paging algorithm for
 > Node.js JavaScript and TypeScript, free dependencies
 
-### 🏠 [Homepage](https://github.com/lucasbernardol/paging-util#readme)
+#### 🏠 [Homepage](https://github.com/lucasbernardol/paging-util#readme)
 
 ## Install
+
+Install with [yarn](https://yarnpkg.com):
 
 ```bash
 $ yarn add paging-util
@@ -72,21 +53,21 @@ const odds = range.filter(value => !(value % 2));
 - **pagination** - pagination `object`
   - **total** - total items
   - **pages** - total pages
-  - **currentPage** - current page
+  - **current** - current page
   - **firstPage** - first page `1`
   - **limit** - total items to show per page, `10`
-  - **firstResult, lastResult** - first and last result (indexes)
-  - **results** - results to show
+  - **firstIndex, lastIndex** - first and last result (indexes)
+  - **length** - results to show
   - **next** - next page
   - **previous** - previous page,
-  - **hasNextPage** - `true` or `false`
-  - **hasPreviousPage** - `true` or `false`
+  - **hasNext** - `true` or `false`
+  - **hasPrevious** - `true` or `false`
 - **offSet** - pagination Offset-based
 - **range** - array of pages
 
 ---
 
-- **range(start?, end?):** array of pages.
+- **range(start, end?, step?):** array of pages.
 
 ## Author
 
@@ -107,5 +88,3 @@ Give a ⭐️ if this project helped you!
 Copyright © 2021 [José Lucas](https://github.com/lucasbernardol).
 <br />
 This project is [MIT](https://github.com/lucasbernardol/paging-util/blob/master/LICENSE) licensed.
-
-Build with ❤️ by: [José Lucas](https://github.com/lucasbernardol)
