@@ -1,5 +1,4 @@
 const isLessThanOneNaN = (value: number) => value < 1 || isNaN(value);
-
 const firstPage = 1;
 const maxItemsPerPage = 30;
 const minItemsPerPage = 10;
@@ -51,18 +50,131 @@ export function range(start: number, stop?: number, step: number = 1) {
   return accumulator;
 }
 
+/**
+ * @function
+ */
+export function paginate(options: Options): OutPut {
+  const {
+    total: items,
+    minLimit = minItemsPerPage,
+    maxLimit = maxItemsPerPage,
+    limit = minLimit,
+    page = firstPage,
+    setRange = true,
+  } = options || {};
+
+  /**
+   * - total
+   */
+  const total = Number(items);
+
+  const totalIsLessThanZeroNaN = total < 0 || isNaN(total);
+
+  if (totalIsLessThanZeroNaN) return null;
+
+  /**
+   * - limit `number`
+   */
+  let totalItemsPerPage = Number(limit);
+
+  const limitInputIsLessThanOneNaN = isLessThanOneNaN(totalItemsPerPage);
+
+  if (limitInputIsLessThanOneNaN) {
+    /**
+     * @default 10
+     */
+    totalItemsPerPage = minLimit;
+  } else if (totalItemsPerPage > maxLimit) {
+    totalItemsPerPage = maxLimit;
+  }
+
+  /**
+   * - pages `number`
+   */
+  const pages = Math.max(firstPage, Math.ceil(total / totalItemsPerPage));
+
+  /**
+   * - current page `number`
+   */
+  let current = Number(page);
+
+  const pageInputIsLessThanOneNaN = isLessThanOneNaN(current);
+
+  if (pageInputIsLessThanOneNaN) {
+    /**
+     * @default 1
+     */
+    current = firstPage;
+  } else if (current > pages) {
+    current = pages;
+  }
+
+  /**
+   * - hasNext `boolean`
+   * - hasPrevious `boolean`
+   *
+   * - next `number`
+   * - previous `number`
+   */
+  const hasNext = current < pages;
+
+  const hasPrevious = current > firstPage;
+
+  const next = hasNext ? current + 1 : null;
+
+  const previous = hasPrevious ? current - 1 : null;
+
+  /**
+   * - offSet `number`
+   */
+  const offSet = offsetBased(current, totalItemsPerPage);
+
+  /**
+   * - range
+   */
+  const calculatedRange: number[] = setRange ? range(firstPage, pages) : null;
+
+  /**
+   * - first index `number`
+   * - last index `number`
+   */
+  const firstIndex = offsetBased(current, totalItemsPerPage);
+
+  let lastIndex = Math.min(firstIndex + totalItemsPerPage - 1, total - 1);
+
+  lastIndex = lastIndex < 0 ? 0 : lastIndex;
+
+  /**
+   * - results `number`
+   */
+  const length = Math.min(lastIndex - firstIndex + 1, total);
+
+  return {
+    offSet,
+    pagination: {
+      total,
+      pages,
+      current,
+      firstPage,
+      limit: totalItemsPerPage,
+      firstIndex,
+      lastIndex,
+      next,
+      previous,
+      hasNext,
+      hasPrevious,
+      length,
+    },
+    range: calculatedRange,
+  };
+}
+
 export interface Options {
   /**
    * total number of items to be paged
    */
   total: number;
-  /**
-   * @default 30
-   */
   maxLimit?: number;
-  /**
-   * @default 10
-   */
   minLimit?: number;
   /**
    * Total number of items per page, defaults to `10`
@@ -83,138 +195,26 @@ export interface Options {
 export interface Pagination {
   total: number;
   pages: number;
-  currentPage: number;
+  current: number;
   firstPage: number;
   limit: number;
   next: number | null;
   previous: number | null;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
-  firstResult: number;
-  lastResult: number;
-  results?: number;
+  hasNext: boolean;
+  hasPrevious: boolean;
+  firstIndex: number;
+  lastIndex: number;
+  length: number;
 }
 
-export interface PaginationOutPut {
+export interface OutPut {
   pagination: Pagination;
   /**
    * Pagination, `Offset-based`
    */
   offSet: number;
   /**
-   * Array of pages, calculated from `current` page
+   * Array of pages
    */
   range: number[] | null;
-}
-
-/**
- * @function
- */
-export function paginate(options: Options): PaginationOutPut | null {
-  /**
-   * - context, options
-   */
-  const context = options || ({} as Options);
-
-  const {
-    total: items,
-    minLimit = minItemsPerPage,
-    maxLimit = maxItemsPerPage,
-    limit = minLimit,
-    page = firstPage,
-    setRange,
-  } = context;
-
-  /**
-   * - total
-   */
-  const total = Number(items);
-
-  const totalInputLessThanOneOrNaN = isLessThanOneNaN(total);
-
-  if (totalInputLessThanOneOrNaN) return null;
-
-  /**
-   * - limit
-   */
-  let totalItemsPerPage = Number(limit);
-
-  const limitInputIsLessThanOneNaN = isLessThanOneNaN(totalItemsPerPage);
-
-  totalItemsPerPage = limitInputIsLessThanOneNaN ? minLimit : totalItemsPerPage;
-
-  totalItemsPerPage =
-    totalItemsPerPage > maxLimit ? maxLimit : totalItemsPerPage;
-
-  /**
-   * - pages
-   */
-  const pages = Math.max(firstPage, Math.ceil(total / totalItemsPerPage));
-
-  /**
-   * - current page index
-   */
-  let currentPage = Number(page);
-
-  const pageInputIsLessThanOneNaN = isLessThanOneNaN(currentPage);
-
-  currentPage = pageInputIsLessThanOneNaN ? firstPage : currentPage;
-
-  currentPage = currentPage > pages ? pages : currentPage;
-
-  /**
-   * - next
-   * - previous
-   *
-   * - hasNextPage
-   * - hasPreviousPage
-   **/
-  const hasNextPage = currentPage < pages;
-
-  const hasPreviousPage = currentPage > firstPage;
-
-  const next = hasNextPage ? currentPage + 1 : null;
-
-  const previous = hasPreviousPage ? currentPage - 1 : null;
-
-  /**
-   * - offSet
-   */
-  const offSet = offsetBased(currentPage, totalItemsPerPage);
-
-  /**
-   * - pagination range
-   */
-  const calculatedRange = setRange ? range(firstPage, pages) : null;
-
-  /**
-   * - first, last results
-   */
-  const firstResult = offsetBased(currentPage, totalItemsPerPage);
-
-  const lastResult = Math.min(firstResult + totalItemsPerPage - 1, total - 1);
-
-  /**
-   * - results
-   */
-  const results = Math.min(lastResult - firstResult + 1, total);
-
-  return {
-    pagination: {
-      total,
-      results,
-      pages,
-      currentPage,
-      firstPage,
-      limit: totalItemsPerPage,
-      firstResult,
-      lastResult,
-      hasNextPage,
-      hasPreviousPage,
-      next,
-      previous,
-    },
-    offSet,
-    range: calculatedRange,
-  };
 }
