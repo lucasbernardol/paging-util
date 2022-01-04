@@ -9,7 +9,8 @@ export const first = {
     page: 2,
   },
   expected: {
-    total: 19,
+    offset: 10,
+    items: 19,
     pages: 2,
     current: 2,
     firstPage: 1,
@@ -21,6 +22,7 @@ export const first = {
     firstIndex: 10,
     lastIndex: 18,
     length: 9,
+    range: [1, 2],
   },
 };
 
@@ -35,7 +37,8 @@ export const second = {
     page: 9,
   },
   expected: {
-    total: 100,
+    offset: 80,
+    items: 100,
     pages: 10,
     current: 9,
     firstPage: 1,
@@ -47,6 +50,7 @@ export const second = {
     firstIndex: 80,
     lastIndex: 89,
     length: 10,
+    range: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
   },
 };
 
