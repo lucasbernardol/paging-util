@@ -1,8 +1,57 @@
-const isLessThanOneNaN = (value: number) => value < 1 || isNaN(value);
+const lessThanOneNaN = (value: number): boolean => value < 1 || isNaN(value);
 
 const FIRST_PAGE = 1;
+
 const MAX_ITEMS_PER_PAGE = 30;
+
 const MIN_ITEMS_PER_PAGE = 10;
+
+export interface Options {
+  /**
+   * total number of items to be paged
+   */
+  total: number;
+  maxLimit?: number;
+  minLimit?: number;
+  /**
+   * Total number of items per page, defaults to `10`
+   * @default 10
+   */
+  limit?: number;
+  /**
+   * current active page, default `1`
+   * @default 1
+   */
+  page?: number;
+  /**
+   * @default false
+   */
+  setRange?: boolean;
+}
+
+export interface OutPut {
+  /**
+   * Pagination `Offset-based`
+   */
+  offset: number;
+  /**
+   * Array of pages
+   */
+  range: number[] | null;
+
+  items: number;
+  pages: number;
+  current: number;
+  limit: number;
+  next: number | null;
+  previous: number | null;
+  hasNext: boolean;
+  hasPrevious: boolean;
+  firstPage: number;
+  firstIndex: number;
+  lastIndex: number;
+  length: number;
+}
 
 export function offsetBased(current: number, limit?: number): number {
   const itemsToPagination = Number(limit) || MIN_ITEMS_PER_PAGE;
@@ -66,7 +115,7 @@ export function paginate(options: Options): OutPut | null {
    */
   let totalItemsPerPage = Number(limit);
 
-  const limitInputIsLessThanOneNaN = isLessThanOneNaN(totalItemsPerPage);
+  const limitInputIsLessThanOneNaN = lessThanOneNaN(totalItemsPerPage);
 
   if (limitInputIsLessThanOneNaN) {
     /**
@@ -87,7 +136,7 @@ export function paginate(options: Options): OutPut | null {
    */
   let current = Number(page);
 
-  const pageInputIsLessThanOneNaN = isLessThanOneNaN(current);
+  const pageInputIsLessThanOneNaN = lessThanOneNaN(current);
 
   if (pageInputIsLessThanOneNaN) {
     /**
@@ -154,57 +203,4 @@ export function paginate(options: Options): OutPut | null {
     length,
     range: calculatedRange,
   };
-}
-
-export interface Options {
-  /**
-   * total number of items to be paged
-   */
-  total: number;
-  maxLimit?: number;
-  minLimit?: number;
-  /**
-   * Total number of items per page, defaults to `10`
-   * @default 10
-   */
-  limit?: number;
-  /**
-   * current active page, default `1`
-   * @default 1
-   */
-  page?: number;
-  /**
-   * @default false
-   */
-  setRange?: boolean;
-}
-
-export interface OutPut {
-  /**
-   * Pagination `Offset-based`
-   */
-  offset: number;
-  /**
-   * Array of pages
-   */
-  range: number[] | null;
-
-  next: number | null;
-  previous: number | null;
-  hasNext: boolean;
-  hasPrevious: boolean;
-
-  /**
-   * Total items to paginate
-   */
-  items: number;
-
-  pages: number; // total pages
-  current: number; // current page
-  limit: number; // limit
-
-  firstPage: number;
-  firstIndex: number;
-  lastIndex: number;
-  length: number;
 }
