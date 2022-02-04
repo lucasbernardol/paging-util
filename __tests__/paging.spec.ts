@@ -9,7 +9,7 @@ describe('Paging: suite', () => {
     /**
      * - offSet, page 1
      */
-    const { offset } = paginate({ total: 100, page: 1, limit });
+    const { offset } = paginate({ records: 100, page: 1, limit });
 
     /**
      * - offSet, page 2
@@ -49,7 +49,7 @@ describe('Paging: suite', () => {
 
     const pagination = paginate(options);
 
-    for (let key = 1; key <= exPagination.pages; key++) {
+    for (let key = 1; key <= exPagination.totalPages; key++) {
       expect(key).toBe(range[key - 1]);
     }
 
