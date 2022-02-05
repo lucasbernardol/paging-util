@@ -1,11 +1,22 @@
-## 📘 paging-util ![GitHub top language](https://img.shields.io/github/languages/top/lucasbernardol/paging-util) ![Version](https://img.shields.io/npm/v/paging-util.svg) ![Documentation](https://img.shields.io/badge/documentation-yes-brightgreen.svg) ![License: MIT](https://img.shields.io/github/license/lucasbernardol/paging-util) ![Downloads](https://img.shields.io/npm/dm/paging-util)
+<h2 align="center">
+  📘 Paging-util: a simple paging algorithm!
+</h2>
 
-> A simple and generic paging algorithm for
-> Node.js JavaScript and TypeScript, free dependencies
+<div align="center">
+  <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/lucasbernardol/paging-util">
+  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/lucasbernardol/paging-util">
+  <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/lucasbernardol/paging-util">
+  <img alt="GitHub" src="https://img.shields.io/github/license/lucasbernardol/paging-util">
+  <img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/lucasbernardol/paging-util">
+  <img alt="npm" src="https://img.shields.io/npm/dm/paging-util">
+</div>
 
-#### 🏠 [Homepage](https://github.com/lucasbernardol/paging-util#readme)
-
-## Install
+<p align="center">
+  A simple and generic paging algorithm for Node.js,JavaScript and TypeScript. Free dependencies. <br/>
+  Support: give a ⭐ if this project helped you! Gihub: <a href="https://github.com/lucasbernardol/paging-util">José Lucas</a>
+</p>
+    
+## :arrow_down: Install package
 
 Install with [yarn](https://yarnpkg.com):
 
@@ -19,10 +30,34 @@ $ yarn add paging-util
 
 ```javascript
 import { paginate } from 'paging-util';
+import { Publication } from '../models/Publication'; // mongoose schema/model!
 
-const { offSet, pagination } = paginate({ total: 100 });
+export class UsersController {
+  constructor() {}
+  async find(request, response) {
+    try {
+      const { page, limit } = request.query;
 
-console.log({ offSet, pagination });
+      const records = await Publication.find().countDocuments(); // records: 100
+
+      const { offset, limit, ...paging } = paginate({ records, page, limit });
+
+      const publications = await Publication.find().skip(offset).limit(limit);
+
+      /**
+       * - Offset-based pagination.
+       *  ((1 - 1) * 10) = 0 * 10 => 0  =>  Position 1: 0 - 9
+       *  ((2 - 1) * 10) = 1 * 10 => 10 =>  Position 2: 10 - 19
+       */
+
+      return response.json({ publications, metadata: { limit, ...rest } });
+    } catch (error) {
+      console.log(error);
+
+      return response.end();
+    }
+  }
+}
 ```
 
 - Using (require/node) **CommonJS**
@@ -30,58 +65,53 @@ console.log({ offSet, pagination });
 ```javascript
 const { paginate } = require('paging-util');
 
-const { range } = paginate({ total: 100, setRange: true });
+const { range } = paginate({ records: 100, setRange: true });
 
 const odds = range.filter(value => !(value % 2));
+
+console.log(odds); // output: [2, 4, 6, 8, 10]
 ```
 
-## API
+## :wrench: API
 
-- **paginate({ total: 100, ...options }):** pagination, main method.
+- **paginate({ records: 100, ...options }):**
 
 #### Options
 
-| Prop name | required | default | description                        |
-| --------- | -------- | ------- | ---------------------------------- |
-| total     | true     | -       | total (resources)                  |
-| page      | false    | 1       | current page                       |
-| limit     | false    | 10      | total (resources) to show per page |
-| setRange  | false    | false   | calculate range                    |
+| Property name | Required | Default | Description                        |
+| ------------- | -------- | ------- | ---------------------------------- |
+| records       | true     | -       | Resources/records                  |
+| page          | false    | 1       | Current page                       |
+| limit         | false    | 10      | Total (resources) to show per page |
+| setRange      | false    | false   | Set array of pages                 |
+| min           | false    | 10      | Min limit                          |
+| max           | false    | 20      | Max limit                          |
 
 #### Output:
 
-- **pagination** - pagination `object`
-  - **total** - total items
-  - **pages** - total pages
-  - **current** - current page
-  - **firstPage** - first page `1`
-  - **limit** - total items to show per page, `10`
-  - **firstIndex, lastIndex** - first and last result (indexes)
-  - **length** - results to show
-  - **next** - next page
-  - **previous** - previous page,
+- **Object**:
+  - **records** - Total records/resources to paging.
+  - **totalPages** - Total pages
+  - **currentPage** - Current page, default: `1`
+  - **firstPage** - First page, default: `1`
+  - **limit** - Total items to show per page, default: `10`
+  - **next** - Next page
+  - **previous** - Previous page,
   - **hasNext** - `true` or `false`
   - **hasPrevious** - `true` or `false`
-- **offSet** - pagination Offset-based
-- **range** - array of pages
+  - **firstIndex, lastIndex** - First and last result (index).
+  - **length** - Results length.
+  - **offSet** - Offset-based pagination.
+  - **constants** - Fixed values.
+  - **range** - Array of pages, default: `null`
 
 ---
 
-- **range(start, end?, step?):** array of pages.
-
-## Author
-
-👤 **José Lucas**
-
-- Github: [@lucasbernardol](https://github.com/lucasbernardol)
+- **range(start, end?, step?):** Array of pages.
 
 ## :open_hands: Contributing
 
 Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/lucasbernardol/paging-util/issues).
-
-## Support
-
-Give a ⭐️ if this project helped you!
 
 ## 📝 License
 
