@@ -11,4 +11,4 @@ export const MIN_ITEMS_PER_PAGE = 10;
 /**
  * @constant MAX_ITEMS_PER_PAGE
  */
-export const MAX_ITEMS_PER_PAGE = 30;
+export const MAX_ITEMS_PER_PAGE = 20;
