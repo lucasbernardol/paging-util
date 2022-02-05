@@ -7,7 +7,7 @@ export const first = {
     records: 19,
     limit: 10,
     page: 2,
-    setRange: true,
+    setRange: false,
     max: 25,
   },
   expected: {
@@ -24,10 +24,11 @@ export const first = {
     firstIndex: 10,
     lastIndex: 18,
     length: 9,
-    range: [1, 2],
+    range: null,
     constants: {
       MIN_LIMIT: 10,
       MAX_LIMIT: 25,
+      FIRST_PAGE: 1,
     },
   },
 };
@@ -61,7 +62,8 @@ export const second = {
     range: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     constants: {
       MIN_LIMIT: 20,
-      MAX_LIMIT: 30,
+      MAX_LIMIT: 20,
+      FIRST_PAGE: 1,
     },
   },
 };
