@@ -26,6 +26,7 @@ export interface Options {
 }
 
 export interface Constants {
+  FIRST_PAGE: number;
   MIN_LIMIT: number;
   MAX_LIMIT: number;
 }
@@ -62,22 +63,22 @@ function lessThanOneNaN(value: any): boolean {
 
 /**
  * - Offset-based pagination.
+ * @function offsetBased
  */
 export function offsetBased(page: number, limit?: number) {
   const limitInput = lessThanOneNaN(limit) ? MIN_ITEMS_PER_PAGE : Number(limit);
 
-  const offset = ((Number(page) || FIRST_PAGE) - 1) * limitInput;
-
-  return offset;
+  return ((Number(page) || FIRST_PAGE) - 1) * limitInput;
 }
 
 /**
  * @function range
  */
-export function range(start: number, stop?: number, step: number = 1) {
+export function range(start: number, stop?: number, step = 1): number[] {
   const accumulator: number[] = [];
 
   let steps = Number(step);
+
   const stepIsEqualZeroNaN = steps === 0 || isNaN(steps);
 
   if (stepIsEqualZeroNaN) return accumulator; // []
@@ -91,7 +92,7 @@ export function range(start: number, stop?: number, step: number = 1) {
 
   const startIsGreaterThanStop = steps > 0 && start > stop;
 
-  if (startIsGreaterThanStop) steps *= -1;
+  if (startIsGreaterThanStop) steps *= -1; // [4, 3, 2, 1]
 
   let interactionsIndex = start;
   while (steps > 0 ? interactionsIndex <= stop : interactionsIndex >= stop) {
@@ -104,9 +105,10 @@ export function range(start: number, stop?: number, step: number = 1) {
 }
 
 /**
+ * - Main function: `paginate`.
  * @function paginate
  */
-export function paginate(options: Options) {
+export function paginate(options: Options): OutPut | null {
   const { page, limit: take, records: total, max, min } = options || {};
 
   /**
@@ -189,12 +191,18 @@ export function paginate(options: Options) {
   /**
    * - range: `number[]`
    */
-  const arrayOfPages = options?.setRange ? range(FIRST_PAGE, totalPages) : null;
+  const rangeArray = options?.setRange ? range(FIRST_PAGE, totalPages) : null;
 
   /**
-   * - length
+   * - length: `number`
    */
   const length = Math.min(lastIndex - firstIndex + 1, records);
+
+  const constants = {
+    MIN_LIMIT,
+    MAX_LIMIT,
+    FIRST_PAGE,
+  };
 
   return {
     records,
@@ -209,13 +217,8 @@ export function paginate(options: Options) {
     firstIndex,
     lastIndex,
     length,
-
+    range: rangeArray,
     offset,
-    constants: {
-      MIN_LIMIT,
-      MAX_LIMIT,
-    },
-
-    range: arrayOfPages,
+    constants,
   };
 }
