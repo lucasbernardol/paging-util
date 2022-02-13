@@ -3,7 +3,7 @@
 </h2>
 
 <p align="center">
-  A simple paging algorithm for Node.js,JavaScript and TypeScript. No dependencies. <br/>Support: give a ⭐ if this project helped you! Gihub: 
+  A simple paging algorithm for Node.js, JavaScript and TypeScript. No dependencies. <br/>Support: give a ⭐ if this project helped you! Gihub: 
   <a href="https://github.com/lucasbernardol/paging-util">José Lucas</a>
 </p>
 
@@ -68,7 +68,7 @@ export class UsersController {
 ```javascript
 const { paginate } = require('paging-util');
 
-const { range } = paginate({ records: 100, setRange: true });
+const { range } = paginate({ records: 100, setRange: true }); // pages: 10
 
 const odds = range.filter(value => !(value % 2));
 
