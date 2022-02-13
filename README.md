@@ -9,10 +9,12 @@
 
 <div align="center">
   <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/lucasbernardol/paging-util">
-  <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/lucasbernardol/paging-util">
-  <img alt="GitHub" src="https://img.shields.io/github/license/lucasbernardol/paging-util">
+   <img alt="GitHub" src="https://img.shields.io/github/license/lucasbernardol/paging-util">
   <img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/lucasbernardol/paging-util">
   <img alt="npm" src="https://img.shields.io/npm/dm/paging-util">
+  <a href="https://github.com/prettier/prettier">
+    <img src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat" /> 
+  </a>
 </div>
     
 ## :arrow_down: Install package
