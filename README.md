@@ -30,39 +30,41 @@ $ yarn add paging-util
 - Using (import/export) **ESM** with TypeScript:
 
 ```typescript
-import { Request, Response, NextFunction } from 'express';
-import { paginate } from 'paging-util';
+import { paginate, offsetBased, range } from 'paging-util';
 
-import { Publication } from '@models/Publication'; // Nongoose: schema
+const offset = offsetBased(2, 10); // => output: 10
 
-export class UsersController {
-  constructor() {}
-  async find(request: Request, response: Response, next: NextFunction) {
-    try {
-      const { page, limit } = request.query;
+const paging = paginate({ recods: 100, setRange: true });
 
-      /** 100 - records */
-      const records = await Publication.find().countDocuments();
-
-      const { offset, limit, ...paging } = paginate({ records, page, limit });
-
-      const publications = await Publication.find().skip(offset).limit(limit);
-
-      const sender = {
-        publications,
-        metadata: {
-          ...paging,
-          limit,
-        },
-      };
-
-      return response.status(200).json(sender);
-    } catch (error) {
-      /** @TODO Call the next Express handler... */
-      return next(error);
-    }
-  }
+/** Output: object */
+{
+  records: 100,
+  totalPages: 10,
+  currentPage: 1,
+  firstPage: 1,
+  limit: 10,
+  next: 2,
+  previous: null,
+  hasNext: true,
+  hasPrevious: false,
+  firstIndex: 0,
+  lastIndex: 9,
+  length: 10,
+  range: [
+    1, 2, 3, 4, 5, 
+    6, 7, 8, 9, 10
+  ], // array: range/total pages
+  offset: 0,
 }
+
+/** @example: range */
+const test1 = range(1, 5); // output: [1, 2, 3, 4, 5]
+
+const test2 = range(5, 1); // output: [5, 4, 3, 2, 1]
+
+const test3 = range(-5, 1);  // output: [-5, -4, -3, -2, -1,  0,  1]
+
+const test4 = range(-5, -1); // output: [-5, -4, -3, -2, -1]
 ```
 
 - Using (require/node) **CommonJS:**
