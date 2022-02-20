@@ -1,13 +1,13 @@
 {
   "name": "paging-util",
-  "version": "2.0.2",
+  "version": "2.1.2",
   "description": "A simple paging algorithm for Node.js, JavaScript and TypeScript.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
     "prebuild": "rimraf dist",
-    "build": "babel src --extensions \".js,.ts\" -d dist --source-maps",
+    "build": "babel src --extensions \".js,.ts\" -d dist",
     "postbuild": "tsc"
   },
   "repository": {
