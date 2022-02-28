@@ -4,17 +4,23 @@ import {
   MAX_ITEMS_PER_PAGE,
 } from './constants/paging';
 
+/**
+ * @interface Options
+ */
 export interface Options {
+  records: number;
+
   /**
-   * @default 1
+   * @default
+   *  const page = 1;
    */
   page?: number;
 
   /**
-   * @default 10
+   * @default
+   *  const MIN_LIMIT= 10;
    */
   limit?: number;
-  records: number;
 
   /**
    * @default false
@@ -25,22 +31,30 @@ export interface Options {
   min?: number;
 }
 
+/**
+ * @interface Constants
+ */
 export interface Constants {
   FIRST_PAGE: number;
   MIN_LIMIT: number;
   MAX_LIMIT: number;
 }
 
-export interface OutPut {
+/**
+ * @interface Output
+ */
+export interface Output {
   records: number;
   totalPages: number;
   currentPage: number;
   firstPage: number;
   limit: number;
+
   next: number | null;
   previous: number | null;
   hasNext: boolean;
   hasPrevious: boolean;
+
   firstIndex: number;
   lastIndex: number;
   length: number;
@@ -50,28 +64,42 @@ export interface OutPut {
   constants: Constants;
 }
 
-function isUndefined(value: any): boolean {
-  return typeof value === 'undefined';
+export interface LessThanOneOrNaNOutput {
+  isInvalid: boolean;
+  parsedValue: number;
 }
 
+const isUndefined = (value: any) => typeof value === 'undefined';
+
 /**
- * @function lessThanOneNaN
+ * - Util
+ * @function lessThanOneOrNaN
  */
-function lessThanOneNaN(value: any): boolean {
-  return value < 1 || isNaN(value);
+export function lessThanOneNaN<T = any>(value: T): LessThanOneOrNaNOutput {
+  const parseInputToNumber = Number(value);
+
+  const isInvalid = parseInputToNumber < 1 || isNaN(parseInputToNumber);
+
+  return {
+    parsedValue: parseInputToNumber,
+    isInvalid,
+  };
 }
 
 /**
- * - Offset-based pagination.
+ * - Calculate Offset based pagination.
  * @function offsetBased
  */
 export function offsetBased(page: number, limit?: number) {
-  const limitInput = lessThanOneNaN(limit) ? MIN_ITEMS_PER_PAGE : Number(limit);
+  const { parsedValue, isInvalid } = lessThanOneNaN(limit);
 
-  return ((Number(page) || FIRST_PAGE) - 1) * limitInput;
+  const totalPerPage = isInvalid ? MIN_ITEMS_PER_PAGE : parsedValue;
+
+  return ((Number(page) || FIRST_PAGE) - 1) * totalPerPage;
 }
 
 /**
+ * - Calculate range
  * @function range
  */
 export function range(start: number, stop?: number, step = 1): number[] {
@@ -105,18 +133,28 @@ export function range(start: number, stop?: number, step = 1): number[] {
 }
 
 /**
- * - Main function: `paginate`.
+ * @description Main function: "paginate"
  * @function paginate
  */
-export function paginate(options: Options): OutPut | null {
-  const { page, limit: take, records: total, max, min } = options || {};
+export function paginate(options: Options): Output | null {
+  const { records: total, limit: totalItemsPerPage, page } = options;
 
-  /**
-   *  MIN_LIMIT && MAX_LIMIT
-   */
-  const MIN_LIMIT = lessThanOneNaN(min) ? MIN_ITEMS_PER_PAGE : Number(min);
+  /** Fix constants  */
+  let MIN_LIMIT: number;
 
-  const MAX_LIMIT = lessThanOneNaN(max) ? MAX_ITEMS_PER_PAGE : Number(max);
+  let MAX_LIMIT: number;
+
+  const minLimitLessThanOneNaN = lessThanOneNaN(options.min);
+
+  MIN_LIMIT = minLimitLessThanOneNaN.isInvalid
+    ? MIN_ITEMS_PER_PAGE
+    : minLimitLessThanOneNaN.parsedValue;
+
+  const maxLimitLessThanOneNaN = lessThanOneNaN(options.max);
+
+  MAX_LIMIT = maxLimitLessThanOneNaN.isInvalid
+    ? MAX_ITEMS_PER_PAGE
+    : maxLimitLessThanOneNaN.parsedValue;
 
   /**
    * - records: `number`
@@ -125,43 +163,44 @@ export function paginate(options: Options): OutPut | null {
 
   const recordsIsLessThanZeroNaN = records < 0 || isNaN(records);
 
-  if (recordsIsLessThanZeroNaN) return null;
+  if (recordsIsLessThanZeroNaN) {
+    return null;
+  }
 
   /**
-   * - limit
-   */
-  let limit: number = Number(take);
+   * @description limit: `number`
+   **/
+  let limit: number = Number(totalItemsPerPage);
 
-  const limitIsLessThanOneNaN = lessThanOneNaN(take);
+  const limitLessThanOneNaNResult = lessThanOneNaN(limit);
 
-  if (limitIsLessThanOneNaN) {
-    // Default: 10
-    limit = MIN_LIMIT;
-  } else if (limit > MAX_LIMIT) {
+  limit = limitLessThanOneNaNResult.isInvalid ? MIN_LIMIT : limit;
+
+  if (limit > MAX_LIMIT) {
     limit = MAX_LIMIT;
   }
 
   /**
-   * - pages: `number`
+   * - totalPages: `number`
    */
   const totalPages = Math.max(FIRST_PAGE, Math.ceil(records / limit));
 
   /**
-   * - current: `number`
+   * @description - current: `number`
    */
   let currentPage = Number(page);
 
   const currentIsLessThanOneNaN = lessThanOneNaN(currentPage);
 
-  if (currentIsLessThanOneNaN) {
-    // Default: 1
-    currentPage = FIRST_PAGE;
-  } else if (currentPage > totalPages) {
+  currentPage = currentIsLessThanOneNaN.isInvalid ? FIRST_PAGE : currentPage;
+
+  if (currentPage > totalPages) {
     currentPage = totalPages;
   }
 
   /**
    * - next `number`
+   *
    * - previous `number`
    */
   const hasNext = currentPage < totalPages;
@@ -186,7 +225,9 @@ export function paginate(options: Options): OutPut | null {
 
   let lastIndex = Math.min(firstIndex + limit - 1, records - 1);
 
-  if (lastIndex < 0) lastIndex = 0;
+  if (lastIndex < 0) {
+    lastIndex = 0;
+  }
 
   /**
    * - range: `number[]`
@@ -194,15 +235,10 @@ export function paginate(options: Options): OutPut | null {
   const rangeArray = options?.setRange ? range(FIRST_PAGE, totalPages) : null;
 
   /**
+   * Total results
    * - length: `number`
    */
   const length = Math.min(lastIndex - firstIndex + 1, records);
-
-  const constants = {
-    MIN_LIMIT,
-    MAX_LIMIT,
-    FIRST_PAGE,
-  };
 
   return {
     records,
@@ -219,6 +255,10 @@ export function paginate(options: Options): OutPut | null {
     length,
     range: rangeArray,
     offset,
-    constants,
+    constants: {
+      MIN_LIMIT,
+      MAX_LIMIT,
+      FIRST_PAGE,
+    },
   };
 }
