@@ -3,6 +3,7 @@ node_modules/
 .husky/
 __tests__
 src/
+.github/
 
 # Files
 .gitignore
