@@ -9,14 +9,15 @@ import {
  */
 export interface Options {
   records: number;
-
   /**
+   * - Current page
    * @default
    *  const page = 1;
    */
   page?: number;
 
   /**
+   * - Total items per page
    * @default
    *  const MIN_LIMIT= 10;
    */
@@ -72,7 +73,6 @@ export interface LessThanOneOrNaNOutput {
 const isUndefined = (value: any) => typeof value === 'undefined';
 
 /**
- * - Util
  * @function lessThanOneOrNaN
  */
 export function lessThanOneNaN<T = any>(value: T): LessThanOneOrNaNOutput {
@@ -80,10 +80,7 @@ export function lessThanOneNaN<T = any>(value: T): LessThanOneOrNaNOutput {
 
   const isInvalid = parseInputToNumber < 1 || isNaN(parseInputToNumber);
 
-  return {
-    parsedValue: parseInputToNumber,
-    isInvalid,
-  };
+  return { isInvalid, parsedValue: parseInputToNumber };
 }
 
 /**
@@ -163,9 +160,7 @@ export function paginate(options: Options): Output | null {
 
   const recordsIsLessThanZeroNaN = records < 0 || isNaN(records);
 
-  if (recordsIsLessThanZeroNaN) {
-    return null;
-  }
+  if (recordsIsLessThanZeroNaN) return null;
 
   /**
    * @description limit: `number`
