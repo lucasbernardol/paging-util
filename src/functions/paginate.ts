@@ -69,9 +69,14 @@ export interface Output {
  * @function paginate Main function: "paginate"
  */
 export function paginate(options: Options): Output {
-  const { setConstants = true, min, max, ...extras } = options;
-
-  const { records: total, limit: take, page } = extras;
+  const {
+    setConstants = true,
+    min,
+    max,
+    records: total,
+    limit: take,
+    page,
+  } = options || {};
 
   /** Fix constants  */
   const MIN_LIMIT = min || MIN_ITEMS_PER_PAGE;
