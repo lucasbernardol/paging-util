@@ -3,8 +3,7 @@
 </h2>
 
 <p align="center">
-  A simple paging algorithm for Node.js, JavaScript and TypeScript. No dependencies. <br/>Support: give a ⭐ if this project helped you! Gihub: 
-  <a href="https://github.com/lucasbernardol/paging-util">José Lucas</a>
+  A simple paging algorithm for Node.js, JavaScript and TypeScript. No dependencies. 
 </p>
 
 <div align="center">
@@ -16,7 +15,12 @@
     <img src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat" /> 
   </a>
 </div>
-    
+
+<p align="center">
+  Support: give a ⭐ if this project helped you! Gihub:
+  <a href="https://github.com/lucasbernardol/paging-util">José Lucas</a>
+</p>
+
 ## :arrow_down: Install package
 
 Install with [yarn](https://yarnpkg.com):
@@ -36,35 +40,38 @@ const offset = offsetBased(2, 10); // => output: 10
 
 const paging = paginate({ recods: 100, setRange: true });
 
-/** Output: object */
 {
-  records: 100,
-  totalPages: 10,
-  currentPage: 1,
-  firstPage: 1,
-  limit: 10,
-  next: 2,
-  previous: null,
-  hasNext: true,
-  hasPrevious: false,
-  firstIndex: 0,
-  lastIndex: 9,
-  length: 10,
-  range: [
-    1, 2, 3, 4, 5, 
-    6, 7, 8, 9, 10
-  ], // array: range/total pages
   offset: 0,
+  pagination: {
+    records: 100,
+    totalPages: 10,
+    currentPage: 1,
+    firstPage: 1,
+    limit: 10,
+    next: 2,
+    previous: null,
+    hasNext: true,
+    hasPrevious: false,
+    isLastPage: false,
+    firstIndex: 0,
+    lastIndex: 9,
+    length: 10,
+    range: [
+      1, 2, 3, 4, 5,
+      6, 7, 8, 9, 10
+    ], // array: range/total pages
+  },
+  constants: {
+    MIN_LIMIT: 10,
+    MAX_LIMIT: 20,
+  }
 }
 
-/** @example: range */
-const test1 = range(1, 5); // output: [1, 2, 3, 4, 5]
+range(1, 5); // output: [1, 2, 3, 4, 5]
 
-const test2 = range(5, 1); // output: [5, 4, 3, 2, 1]
+range(5, 1); // output: [5, 4, 3, 2, 1]
 
-const test3 = range(-5, 1);  // output: [-5, -4, -3, -2, -1,  0,  1]
-
-const test4 = range(-5, -1); // output: [-5, -4, -3, -2, -1]
+range(-5, 1);  // output: [-5, -4, -3, -2, -1,  0,  1]
 ```
 
 - Using (require/node) **CommonJS:**
@@ -72,30 +79,11 @@ const test4 = range(-5, -1); // output: [-5, -4, -3, -2, -1]
 ```javascript
 const { paginate } = require('paging-util');
 
-const { range } = paginate({ records: 100, setRange: true }); // pages: 10
+const { range } = paginate({ records: 100, setRange: true });
 
 const odds = range.filter(value => !(value % 2));
 
 console.log(odds); // output: [2, 4, 6, 8, 10]
-```
-
-- Offset-based pagination algorithm/logic:
-
-```typescript
-import logic from 'node/logic';
-
-logic.explode(); // 😄
-
-/**
- * Output:
- *  - Offset-based pagination:
- *    ((1 - 1) * 10) = 0 * 10 = 0
- *    ((2 - 1) * 10) = 1 * 10 = 10
- *
- *    Position 1: 0 - 9
- *    Position 2: 10 - 19
- *    Position 3: 20 - 29
- */
 ```
 
 ## :wrench: API
@@ -110,6 +98,7 @@ logic.explode(); // 😄
 | page          | false    | 1       | Current page                       |
 | limit         | false    | 10      | Total (resources) to show per page |
 | setRange      | false    | false   | Set array of pages                 |
+| setConstants  | false    | true    | Get constants                      |
 | min           | false    | 10      | Min limit                          |
 | max           | false    | 20      | Max limit                          |
 
@@ -134,6 +123,25 @@ logic.explode(); // 😄
 ---
 
 - **range(start, end?, step?):** Array of pages.
+
+- Offset-based pagination algorithm/logic:
+
+```typescript
+import logic from 'node/logic';
+
+logic.explode(); // 😄
+
+/**
+ * Output:
+ *  - Offset-based pagination:
+ *    ((1 - 1) * 10) = 0 * 10 = 0
+ *    ((2 - 1) * 10) = 1 * 10 = 10
+ *
+ *    Position 1: 0 - 9
+ *    Position 2: 10 - 19
+ *    Position 3: 20 - 29
+ */
+```
 
 ## :open_hands: Contributing
 
