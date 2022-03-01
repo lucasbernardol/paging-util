@@ -45,14 +45,12 @@ describe('Paging: suite', () => {
   it('should be pass in the third "test case"', () => {
     const { options, expected } = third;
 
-    const { range, ...exPagination } = expected;
+    const paging = paginate(options);
 
-    const pagination = paginate(options);
-
-    for (let key = 1; key <= exPagination.totalPages; key++) {
-      expect(key).toBe(range[key - 1]);
+    for (let key = 1; key <= expected.pagination.totalPages; key++) {
+      expect(key).toBe(paging.pagination.range[key - 1]);
     }
 
-    expect(pagination).toEqual({ range, ...exPagination });
+    expect(paging).toEqual(expected);
   });
 });
